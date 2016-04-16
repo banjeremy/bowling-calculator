@@ -9,7 +9,7 @@ describe('frame reducer', () => {
     const action = { type: null };
     const stateAfter = {
       rolls: [],
-      score: 0,
+      score: null,
       mark: null,
     };
 
@@ -21,7 +21,7 @@ describe('frame reducer', () => {
     const action = roll(1);
     const stateAfter = {
       rolls: [1],
-      score: 1,
+      score: null,
       mark: null,
     };
 
@@ -33,13 +33,13 @@ describe('frame reducer', () => {
   it('recognizes strikes', () => {
     const stateBefore = {
       rolls: [],
-      score: 0,
+      score: null,
       mark: null,
     };
     const action = roll(10);
     const stateAfter = {
       rolls: [10],
-      score: 10,
+      score: null,
       mark: 'strike',
     };
 
@@ -51,13 +51,13 @@ describe('frame reducer', () => {
   it('recognizes spares', () => {
     const stateBefore = {
       rolls: [1],
-      score: 1,
+      score: null,
       mark: null,
     };
     const action = roll(9);
     const stateAfter = {
       rolls: [1, 9],
-      score: 10,
+      score: null,
       mark: 'spare',
     };
 
@@ -66,22 +66,18 @@ describe('frame reducer', () => {
     expect(frame(stateBefore, action)).to.deep.equal(stateAfter);
   });
 
-  it('recognizes open and calculates score', () => {
+  it('recognizes open', () => {
     const stateBefore = {
       rolls: [3],
-      score: 3,
+      score: null,
       mark: null,
     };
     const action = roll(4);
-    const stateAfter = {
-      rolls: [3, 4],
-      score: 7,
-      mark: 'open',
-    };
 
+    deepFreeze(stateBefore);
     deepFreeze(action);
 
-    expect(frame(stateBefore, action)).to.deep.equal(stateAfter);
+    expect(frame(stateBefore, action).mark).to.equal('open');
   });
 });
 
@@ -91,7 +87,7 @@ describe('frames reducer', () => {
     const action = roll(4);
     const stateAfter = [{
       rolls: [4],
-      score: 4,
+      score: null,
       mark: null,
     }];
 
@@ -104,13 +100,13 @@ describe('frames reducer', () => {
   it('updates the last frame if the last frame has not ended', () => {
     const stateBefore = [{
       rolls: [4],
-      score: 4,
+      score: null,
       mark: null,
     }];
     const action = roll(6);
     const stateAfter = [{
       rolls: [4, 6],
-      score: 10,
+      score: null,
       mark: 'spare',
     }];
 
@@ -133,7 +129,7 @@ describe('frames reducer', () => {
       mark: 'open',
     }, {
       rolls: [8],
-      score: 8,
+      score: null,
       mark: null,
     }];
 
@@ -146,7 +142,7 @@ describe('frames reducer', () => {
   it('calculates the score of strike frames', () => {
     const stateBefore = [{
       rolls: [10],
-      score: 10,
+      score: null,
       mark: 'strike',
     }];
     const action1 = roll(7);
@@ -172,7 +168,7 @@ describe('frames reducer', () => {
   it('handles consecutive strikes', () => {
     const stateBefore = [{
       rolls: [10],
-      score: 10,
+      score: null,
       mark: 'strike',
     }];
     const action1 = roll(10);
@@ -184,11 +180,11 @@ describe('frames reducer', () => {
       mark: 'strike',
     }, {
       rolls: [10],
-      score: 20,
+      score: null,
       mark: 'strike',
     }, {
       rolls: [10],
-      score: 10,
+      score: null,
       mark: 'strike',
     }];
 
@@ -202,7 +198,7 @@ describe('frames reducer', () => {
   it('calculates the score of spare frames', () => {
     const stateBefore = [{
       rolls: [9, 1],
-      score: 10,
+      score: null,
       mark: 'spare',
     }];
     const action1 = roll(2);
