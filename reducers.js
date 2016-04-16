@@ -88,3 +88,22 @@ export function frames(state = [], action) {
       return state;
   }
 }
+
+// export default function score(
+//   state = {
+//     currentFrameIndex: 0,
+//     totalScore: 0,
+//     frames: [],
+//   },
+//   action
+// ) {
+//   let currentFrame;
+//   switch (action.type) {
+//     case ROLL:
+//     if (!state.frames.length) {
+//       currentFrame = frame(state.frames, action);
+//     }
+//     default:
+//       return state;
+//   }
+// }
