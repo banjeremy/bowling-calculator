@@ -169,6 +169,36 @@ describe('frames reducer', () => {
     expect(frames(frames(stateBefore, action1), action2)).to.deep.equal(stateAfter);
   });
 
+  it('handles consecutive strikes', () => {
+    const stateBefore = [{
+      rolls: [10],
+      score: 10,
+      mark: 'strike',
+    }];
+    const action1 = roll(10);
+    const action2 = roll(10);
+
+    const stateAfter = [{
+      rolls: [10],
+      score: 30,
+      mark: 'strike',
+    }, {
+      rolls: [10],
+      score: 20,
+      mark: 'strike',
+    }, {
+      rolls: [10],
+      score: 10,
+      mark: 'strike',
+    }];
+
+    deepFreeze(stateBefore);
+    deepFreeze(action1);
+    deepFreeze(action2);
+
+    expect(frames(frames(stateBefore, action1), action2)).to.deep.equal(stateAfter);
+  });
+
   it('calculates the score of spare frames', () => {
     const stateBefore = [{
       rolls: [9, 1],

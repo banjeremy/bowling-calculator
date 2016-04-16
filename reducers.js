@@ -1,11 +1,13 @@
 import { types as actionTypes } from './actions';
 /* REDUCERS */
 
-export function frame(state = {
-  rolls: [],
-  score: 0,
-  mark: null,
-}, action) {
+export function frame(
+  state = {
+    rolls: [],
+    score: 0,
+    mark: null,
+  },
+  action) {
   let nextState;
   let totalPinfall;
 
@@ -89,21 +91,25 @@ export function frames(state = [], action) {
   }
 }
 
-// export default function score(
-//   state = {
-//     currentFrameIndex: 0,
-//     totalScore: 0,
-//     frames: [],
-//   },
-//   action
-// ) {
-//   let currentFrame;
-//   switch (action.type) {
-//     case ROLL:
-//     if (!state.frames.length) {
-//       currentFrame = frame(state.frames, action);
-//     }
-//     default:
-//       return state;
-//   }
-// }
+export function score(
+  state = {
+    totalScore: 0,
+    frames: [],
+  },
+  action
+) {
+  let nextFrames;
+
+  switch (action.type) {
+    case actionTypes.ROLL:
+      nextFrames = frames(state.frames, action);
+
+      return {
+        ...state,
+        totalScore: nextFrames.slice(0, 10).reduce((a, b) => a + b.score, 0),
+        frames: nextFrames,
+      };
+    default:
+      return state;
+  }
+}
